@@ -790,7 +790,7 @@ LANGUAGE 'plpgsql'
 AS $$
 
 BEGIN
-    SELECT c.firstname, c.surname, c.phone, u.email, u.state INTO _firstname, _surname, _phone, _email, _state FROM clt_customers c, clt_users u WHERE u.id = c.user_id;
+    SELECT address, postcode, isdefault, state INTO _address, _postcode, _isdefault, _state FROM clt_customers c, clt_users u WHERE u.id = c.user_id;
 END;
 $$;
 
