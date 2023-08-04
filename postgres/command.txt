@@ -1,0 +1,15 @@
+psql
+
+\password - > troca a senha
+senha atual 16281628
+\l -> lista de dbs
+\du -> lista de usuarios
+\c -> mudar banco de dados
+\d -> lista de tabelas
+\! cls
+
+psql -U postgres -h localhost
+----------------------------------------------------
+CREATE DATABASE cinderella;
+
+CREATE TABLE clt_users(id INT NOT NULL)
