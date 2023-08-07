@@ -1,6 +1,8 @@
 CREATE DATABASE cinderella;
 \c cinderella;
 
+CREATE EXTENSION pgcrypto ;
+
 
 -- Type: group
 
@@ -442,6 +444,8 @@ CREATE OR REPLACE PROCEDURE cltp_create_customer(
     _email VARCHAR(50),
     _pass VARCHAR(50),
     _phone numeric,
+    _address VARCHAR(100),
+    _postcode VARCHAR(50),
     OUT _id integer
 )
 LANGUAGE 'plpgsql'
@@ -451,6 +455,8 @@ BEGIN
     INSERT INTO clt_users(email, password, state) values (_email, (SELECT crypt(_pass, gen_salt('md5'))), 'Active') RETURNING id INTO _id;
     COMMIT;
     INSERT INTO clt_customers(user_id, firstname, surname, phone) values (_id, _firstname, _surname, _phone) RETURNING user_id INTO _id;
+    COMMIT;
+    INSERT INTO clt_addresses(user_id, address, postcode, isdefault, state) values (_id, _address, _postcode, true, 'Active') RETURNING user_id INTO _id;
     COMMIT;
 END;
 $$;
