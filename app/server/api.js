@@ -1,7 +1,11 @@
 const express = require('express');
 const apiRouter = express.Router();
 
-const shoesRouter = require('./shoes');
-apiRouter.use('/shoes', shoesRouter);
+const productsRouter = require('./products');
+apiRouter.use('/products', productsRouter);
+
+const userRouter = require('./user');
+apiRouter.use('/user', userRouter);
+
  
 module.exports = apiRouter;
