@@ -20,7 +20,6 @@ app.use(
 const apiRouter = require('./server/api');
 app.use('/api', apiRouter);
 
-
 app.use(express.static('public'));
 
 // This conditional is here for testing purposes:
