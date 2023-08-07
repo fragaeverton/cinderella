@@ -1,9 +1,6 @@
 const express = require('express');
 const app = express();
 
-const passport = require("passport");
-const session = require("express-session");
-
 module.exports = app;
 const PORT = process.env.PORT || 4001;
 
@@ -25,19 +22,6 @@ app.use('/api', apiRouter);
 
 
 app.use(express.static('public'));
-
-
-app.use(
-  session({
-    secret: "secret-key",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
-app.use(passport.initialize());
-app.use(passport.session());
-
 
 
 // This conditional is here for testing purposes:
