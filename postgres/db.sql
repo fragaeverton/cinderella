@@ -579,7 +579,7 @@ AS $$
 
 BEGIN
     CASE _table
-        WHEN 'user' THEN
+        WHEN '/api/user' THEN
             UPDATE clt_users SET state = 'Inactive' WHERE id = _id RETURNING 'OK' INTO _res;
         WHEN 'address' THEN
             UPDATE clt_addresses SET state = 'Inactive' WHERE id = _id RETURNING 'OK' INTO _res;
@@ -631,7 +631,7 @@ LANGUAGE 'plpgsql'
 AS $$
 
 BEGIN
-    UPDATE clt_users SET password = _pass, token = _token, state = _state WHERE id = _id RETURNING 'OK' INTO _res;
+    UPDATE clt_users SET password = (SELECT crypt(_pass, gen_salt('md5'))), token = _token, state = _state WHERE id = _id RETURNING 'OK' INTO _res;
     UPDATE clt_customers SET firstname = _firstname, surname = _surname, phone = _phone WHERE user_id = _id RETURNING 'OK' INTO _res;
     COMMIT;
 END;

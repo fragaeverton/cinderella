@@ -47,8 +47,39 @@ const createUserAddress = (request, response) => {
     })
 }
 
+
+const updateUser = (request, response) => {
+    const id = parseInt(request.params.id)
+    const { password, state, firstname, surname, phone } = request.body
+    pool.query(`CALL cltp_update_customer( $1, $2, '', $3, $4, $5, $6, null);`, [ id, password, state, firstname, surname, phone] , (error, results) => {
+        if(id == undefined){
+            response.status(500).send({message : error.name})
+        }else if (error) {
+            throw error
+        }else{
+            response.status(200).send(results.rows)
+        }
+    })
+}
+
+const deleteRow = (request, response) => {
+    const id = parseInt(request.params.id);
+    const target = request.baseUrl;
+    pool.query(`CALL cltp_delete( $1, $2, null);`, [id, target] , (error, results) => {
+        if(id == undefined){
+            response.status(500).send({message : error.name})
+        }else if (error) {
+            throw error
+        }else{
+            response.status(200).send(results.rows)
+        }
+    })
+}
+
 module.exports = {
     getAllProducts,
     createUser,
-    createUserAddress
+    createUserAddress,
+    updateUser,
+    deleteRow
 };
