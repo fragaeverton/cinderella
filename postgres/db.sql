@@ -1,8 +1,6 @@
 CREATE DATABASE cinderella;
 \c cinderella;
 
-CREATE EXTENSION pgcrypto ;
-
 
 -- Type: group
 
@@ -32,7 +30,7 @@ CREATE TABLE IF NOT EXISTS clt_users
 (
     id integer NOT NULL,
     email VARCHAR(50) COLLATE pg_catalog."default" NOT NULL UNIQUE,
-    password VARCHAR(50) COLLATE pg_catalog."default" NOT NULL,
+    password VARCHAR(200) COLLATE pg_catalog."default" NOT NULL,
     token VARCHAR(50) COLLATE pg_catalog."default",
     state "status" NOT NULL,
     CONSTRAINT clt_users_pkey PRIMARY KEY (id)
@@ -438,11 +436,14 @@ ALTER TABLE IF EXISTS clt_order_items
 
 
 
+
+
+
 CREATE OR REPLACE PROCEDURE cltp_create_customer(
     _firstname VARCHAR(50),
     _surname VARCHAR(50),
     _email VARCHAR(50),
-    _pass VARCHAR(50),
+    _pass VARCHAR(200),
     _phone numeric,
     _address VARCHAR(100),
     _postcode VARCHAR(50),
@@ -452,7 +453,7 @@ LANGUAGE 'plpgsql'
 AS $$
 
 BEGIN
-    INSERT INTO clt_users(email, password, state) values (_email, (SELECT crypt(_pass, gen_salt('md5'))), 'Active') RETURNING id INTO _id;
+    INSERT INTO clt_users(email, password, state) values (_email, _pass, 'Active') RETURNING id INTO _id;
     COMMIT;
     INSERT INTO clt_customers(user_id, firstname, surname, phone) values (_id, _firstname, _surname, _phone) RETURNING user_id INTO _id;
     COMMIT;
@@ -602,7 +603,7 @@ $$;
 
 CREATE OR REPLACE PROCEDURE cltp_update_user(
     _id integer,
-    _pass VARCHAR(50),
+    _pass VARCHAR(200),
     _token VARCHAR(50),
     _state "status",
     OUT _res VARCHAR(10)
@@ -619,7 +620,7 @@ $$;
 
 CREATE OR REPLACE PROCEDURE cltp_update_customer(
     _id integer,
-    _pass VARCHAR(50),
+    _pass VARCHAR(200),
     _token VARCHAR(50),
     _state "status",
     _firstname VARCHAR(50),
@@ -631,7 +632,7 @@ LANGUAGE 'plpgsql'
 AS $$
 
 BEGIN
-    UPDATE clt_users SET password = (SELECT crypt(_pass, gen_salt('md5'))), token = _token, state = _state WHERE id = _id RETURNING 'OK' INTO _res;
+    UPDATE clt_users SET password = _pass, token = _token, state = _state WHERE id = _id RETURNING 'OK' INTO _res;
     UPDATE clt_customers SET firstname = _firstname, surname = _surname, phone = _phone WHERE user_id = _id RETURNING 'OK' INTO _res;
     COMMIT;
 END;
@@ -757,14 +758,14 @@ $$;
 
 CREATE OR REPLACE PROCEDURE cltp_login(
     _email VARCHAR(50),
-    _pass VARCHAR(50),
+    _pass VARCHAR(200),
     OUT _is_correct boolean
 )
 LANGUAGE 'plpgsql'
 AS $$
 
 BEGIN
-    SELECT (password = crypt(_pass, password)) INTO _is_correct from clt_users WHERE email = _email;
+    SELECT (password = _pass INTO _is_correct from clt_users WHERE email = _email;
 END;
 $$;
 
@@ -799,6 +800,10 @@ BEGIN
     SELECT address, postcode, isdefault, state INTO _address, _postcode, _isdefault, _state FROM clt_customers c, clt_users u WHERE u.id = c.user_id;
 END;
 $$;
+
+CREATE OR REPLACE FUNCTION getcustomers() RETURNS SETOF clt_customers AS $$
+SELECT * FROM clt_customers;
+$$ LANGUAGE sql;
 
 /*
 CALL cltp_create_customer('Everton','Fraga', 'everton_ferpas@hotmail.com','123456', 07312415513, 0);

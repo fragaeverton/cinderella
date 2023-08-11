@@ -1,11 +1,29 @@
 const userRouter = require('express').Router();
+const passport = require('passport');
 module.exports = userRouter;
 
-const  {createUser, createUserAddress, updateUser, deleteRow}  = require('./queries');
+const  {createUserAddress}  = require('../config/queries');
 
-
-//userRouter.get('/all', getAllProducts);
-userRouter.post('/', createUser);
 userRouter.post('/address', createUserAddress);
-userRouter.put('/:id', updateUser)
-userRouter.delete('/:id', deleteRow)
+//userRouter.delete('/:id', deleteRow)
+
+userRouter.get('/',  (req, res, next) => {
+  res.json({ user: req.session.passport.user });
+});
+
+
+userRouter.put("/new-password",
+    passport.authenticate("password-update", { session: true }),
+    (req, res, next) => {
+      res.json({ user: req.user });
+    }
+);
+
+userRouter.delete("/",
+    passport.authenticate("delete-user", { session: true }),
+    (req, res, next) => {
+      res.json({ user: req.user });
+    }
+);
+
+
