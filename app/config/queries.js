@@ -11,6 +11,44 @@ const getAllProducts = (request, response) => {
     })
 }
 
+const getProduct = (request, response) => {
+    const id = parseInt(request.params.id)
+    pool.query("SELECT p.id, b.name, p.model, p.type, s.size, pr.price, s.qty FROM clt_products p, clt_prices pr, clt_stock s, clt_brands b WHERE p.brand_id = b.id and p.id = pr.product_id and p.id = s.product_id and b.state = 'Active' and s.state = 'Active' and p.state = 'Active' and p.id = $1", [id], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).json(results.rows)
+    })
+}
+
+
+const createProduct = (request, response) => {
+    const { brand_id, model, type } = request.body
+    pool.query(`CALL cltp_create_products($1, $2, $3, null)`, [ brand_id, model, type] , (error, results) => {
+        if(request.body.brand_id == undefined){
+            response.status(500).send({message : error.name})
+        }else if (error) {
+            throw error
+        }else{
+            response.status(201).send(results.rows)
+        }
+    })
+}
+
+const updateProduct = async (request, response) => {    
+    const id = parseInt(request.params.id)
+    const { model, type } = request.body
+    pool.query(`UPDATE clt_products SET model = $2, type = $3 WHERE id = $1 RETURNING *`, [ id, model, type] , (error, results) => {
+        if(id == undefined){
+            response.status(500).send({message : error.name})
+        }else if (error) {
+            throw error
+        }else{
+            response.status(200).send(results.rows)
+        }
+    })
+}
+
 const createUserAddress = (request, response) => {
     const { user_id, address, postcode } = request.body
     pool.query(`CALL cltp_create_customer_address( $1, $2, $3, null);`, [ user_id, address, postcode] , (error, results) => {
@@ -24,23 +62,6 @@ const createUserAddress = (request, response) => {
     })
 }
 
-
-const updateUser = async (request, response) => {    
-    const id = parseInt(request.params.id)
-    const { password, state, firstname, surname, phone } = request.body
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(password, salt);
-    console.log(hash)
-    pool.query(`CALL cltp_update_customer( $1, $2, '', $3, $4, $5, $6, null);`, [ id, hash, state, firstname, surname, phone] , (error, results) => {
-        if(id == undefined){
-            response.status(500).send({message : error.name})
-        }else if (error) {
-            throw error
-        }else{
-            response.status(200).send(results.rows)
-        }
-    })
-}
 
 const deleteRow = (request, response) => {
     const id = parseInt(request.params.id);
@@ -58,7 +79,10 @@ const deleteRow = (request, response) => {
 
 module.exports = {
     getAllProducts,
+    getProduct,
+    createProduct,
+    updateProduct,/*
+    deleteProduct,*/
     createUserAddress,
-    updateUser,
     deleteRow
 };

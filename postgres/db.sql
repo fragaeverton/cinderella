@@ -590,7 +590,7 @@ BEGIN
             UPDATE clt_order_items SET state = 'Inactive' WHERE id = _id RETURNING 'OK' INTO _res;
         WHEN 'order' THEN
             UPDATE clt_orders SET state = 'Inactive' WHERE id = _id RETURNING 'OK' INTO _res;
-        WHEN 'product' THEN
+        WHEN '/api/products' THEN
             UPDATE clt_products SET state = 'Inactive' WHERE id = _id RETURNING 'OK' INTO _res;
         WHEN 'stock' THEN
             UPDATE clt_stock SET state = 'Inactive' WHERE id = _id RETURNING 'OK' INTO _res;
@@ -818,9 +818,9 @@ CALL cltp_create_stock( 1, 20, 11 ,0);
 
 CALL cltp_create_price( 1, 9.98, '2023/08/30',0);
 
-CALL cltp_create_order( 1,  1 ,0);
+CALL cltp_create_order(3,  1 ,0);
 
-CALL cltp_create_order_item( 1, 1, 7, 0);
+CALL cltp_create_order_item(1, 1, 7, 0);
 
 CALL cltp_delete(1, 'order_item', 0);
 
