@@ -1,24 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
+import HomePage from './pages/home';
+import SearchPage from './pages/search';
+import PetDetailsPage from './pages/detail';
+import PetDetailsNotFound from './pages/petDetailsNotFound';
+import Root from './components/root';
+
+// Add react-router-dom imports
+
+// create router with JSX Route elements
+const appRouter = "REPLACE ME";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    // replace below with a Router Provider
+    <p>REPLACE ME</p>
   );
 }
 
