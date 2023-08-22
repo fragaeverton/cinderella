@@ -124,6 +124,11 @@ h2 {
   padding: 18px 60px;
 }
 
+#my-logo{
+  width: 80px;
+  height: 60px;
+}
+
 html,
 body {
   margin: 0;
