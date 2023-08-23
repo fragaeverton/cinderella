@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getPets } from '../../api/petfinder';
+import { getProducts} from '../../api/products'
 import Hero from '../../components/hero';
 import { useParams, Link } from 'react-router-dom';
 
@@ -8,15 +8,16 @@ import { useParams, Link } from 'react-router-dom';
 
 const HomePage = () => {
   const [data, setData] = useState(null);
-  const {type} = useParams();; // Fix me!
+  const {type} = useParams(); // Fix me!
 
   useEffect(() => {
-    async function getPetsData() {
-      const petsData = await getPets(type);
-      setData(petsData);
+    async function getProductsData() {
+      let productsData = await getProducts();
+      if(type !== undefined) productsData = productsData.filter(e => e.type === type);
+      setData(productsData);
     }
 
-    getPetsData();
+    getProductsData();
   }, [type]);
 
   if (!data) {
@@ -26,17 +27,17 @@ const HomePage = () => {
   return (
     <div className="page">
       <Hero />
-      <h3>
+      {/*<h3>
         <span className="pet-type-label">{type ? `${type}s` : 'Pets'}</span>{' '}
         available for adoption near you
-      </h3>
-
+      </h3>*/}
+      {console.log(data)}
       {data.length ? (
         <div className="grid">
-          {data.map((animal) => (
+          {data.map((product) => (
             <Link // Change me to a Link!
-              key={animal.id}
-              to={`/${animal.type.toLowerCase()}/${animal.id}`}
+              key={product.id}
+              to={`/${product.type.toLowerCase()}/${product.id}`}
               className="pet"
             >
               <article>
@@ -45,23 +46,23 @@ const HomePage = () => {
                     <img
                       className="pet-image"
                       src={
-                        animal.photos[0]?.medium ||
+                        product.img ||
                         '/missing-animal.png'
                       }
                       alt=""
                     />
                   }
                 </div>
-                <h3>{animal.name}</h3>
-                <p>Breed: {animal.breeds.primary}</p>
-                <p>Color: {animal.colors.primary}</p>
-                <p>Gender: {animal.gender}</p>
+                <h3>{product.name + " " + product.model + " £" + product.price}</h3>
+                <p>Size: {product.size}</p>
+                <p>Available: {product.qty}</p>
+                <p>Type: {product.type}</p>
               </article>
             </Link> // Don't forget to change me!
           ))}
         </div>
       ) : (
-        <p className="prompt">No {type}s available for adoption now.</p>
+        <p className="prompt">No {type}s available now.</p>
       )}
     </div>
   );

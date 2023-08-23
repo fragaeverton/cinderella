@@ -2,7 +2,7 @@ import React from 'react';
 // import useNavigate here.
 import { useNavigate } from 'react-router-dom';
 
-const PetDetailsNotFound = () => {
+const ProductDetailsNotFound = () => {
 
   // get the navigate function from useNavigate
   const navigate = useNavigate();
@@ -28,4 +28,4 @@ const PetDetailsNotFound = () => {
   );
 };
 
-export default PetDetailsNotFound;
+export default ProductDetailsNotFound;

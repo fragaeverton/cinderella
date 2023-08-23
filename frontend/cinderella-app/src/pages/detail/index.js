@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { getPetDetails } from '../../api/petfinder';
+import { getProductDetails }  from '../../api/products'; 
 import Hero from '../../components/hero';
 import { useParams, Navigate } from 'react-router-dom';
 
 // Import useParams
 // Import Navigate
 
-const PetDetailsPage = () => {
+const ProductDetailsPage = () => {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const {id} = useParams(); 
 
   useEffect(() => {
-    async function getPetsData() {
+    async function getProductsData() {
       try {
-        const petsData = await getPetDetails(id);
-        setData(petsData);
+        const productData = await getProductDetails(id);
+        setData(productData);
         setError(false);
       } catch (e) {
         setError(true);
@@ -24,7 +24,7 @@ const PetDetailsPage = () => {
       setLoading(false);
     }
 
-    getPetsData();
+    getProductsData();
   }, [id]);
 
   return (
@@ -34,31 +34,31 @@ const PetDetailsPage = () => {
       ) : error ? (
         <div>
           {/* Redirect to /pet-details-not-found if there was an error! */}
-          <Navigate to={"/pet-details-not-found"}/>
+          <Navigate to={"/product-details-not-found"}/>
         </div>
       ) : (
         <main>
           <Hero
-            image={data.photos[1]?.full || 'https://i.imgur.com/aEcJUFK.png'}
-            displayText={`Meet ${data.name}`}
+            image={data[0].img || 'https://i.imgur.com/aEcJUFK.png'}
+            displayText={`${data[0].model}`}
           />
           <div className="pet-detail">
             <div className="pet-image-container">
               <img
                 className="pet-image"
                 src={
-                  data.photos[0]?.medium || 'https://i.imgur.com/aEcJUFK.png'
+                  data[0].img || 'https://i.imgur.com/aEcJUFK.png'
                 }
                 alt=""
               />
             </div>
             <div>
-              <h1>{data.name}</h1>
-              <h3>Breed: {data.breeds.primary}</h3>
-              <p>Color: {data.colors.primary || 'Unknown'}</p>
-              <p>Gender: {data.gender}</p>
-              <h3>Description</h3>
-              <p>{data.description}</p>
+              <h1>{data[0].name}</h1>
+              <h3>Model: {data[0].model}</h3>
+              <p>Type: {data[0].type}</p>
+              <p>Size: {data[0].size}</p>
+              <p>Price: {data[0].price}</p>
+              <p>Available: {data[0].qty}</p>
             </div>
           </div>
         </main>
@@ -67,4 +67,4 @@ const PetDetailsPage = () => {
   );
 };
 
-export default PetDetailsPage;
+export default ProductDetailsPage;

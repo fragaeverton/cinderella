@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs")
 //const passport = require('passport');
 
 const getAllProducts = (request, response) => {
-    pool.query("SELECT p.id, b.name, p.model, p.type, s.size, pr.price, s.qty FROM clt_products p, clt_prices pr, clt_stock s, clt_brands b WHERE p.brand_id = b.id and p.id = pr.product_id and p.id = s.product_id and b.state = 'Active' and s.state = 'Active' and p.state = 'Active' ORDER BY p.id ASC", (error, results) => {
+    pool.query("SELECT p.id, b.name, p.model, p.type, s.size, pr.price, s.qty, p.img FROM clt_products p, clt_prices pr, clt_stock s, clt_brands b WHERE p.brand_id = b.id and p.id = pr.product_id and p.id = s.product_id and b.state = 'Active' and s.state = 'Active' and p.state = 'Active' ORDER BY p.id ASC", (error, results) => {
       if (error) {
         throw error
       }
@@ -13,7 +13,16 @@ const getAllProducts = (request, response) => {
 
 const getProduct = (request, response) => {
     const id = parseInt(request.params.id)
-    pool.query("SELECT p.id, b.name, p.model, p.type, s.size, pr.price, s.qty FROM clt_products p, clt_prices pr, clt_stock s, clt_brands b WHERE p.brand_id = b.id and p.id = pr.product_id and p.id = s.product_id and b.state = 'Active' and s.state = 'Active' and p.state = 'Active' and p.id = $1", [id], (error, results) => {
+    pool.query("SELECT p.id, b.name, p.model, p.type, s.size, pr.price, s.qty, p.img FROM clt_products p, clt_prices pr, clt_stock s, clt_brands b WHERE p.brand_id = b.id and p.id = pr.product_id and p.id = s.product_id and b.state = 'Active' and s.state = 'Active' and p.state = 'Active' and p.id = $1", [id], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).json(results.rows)
+    })
+}
+
+const getProductTypes = (request, response) => {
+    pool.query("SELECT distinct(type) AS type FROM clt_products WHERE state = 'Active' ORDER BY type;", (error, results) => {
       if (error) {
         throw error
       }
@@ -83,5 +92,6 @@ module.exports = {
     createProduct,
     updateProduct,
     createUserAddress,
-    deleteRow
+    deleteRow,
+    getProductTypes
 };

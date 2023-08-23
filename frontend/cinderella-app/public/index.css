@@ -129,6 +129,10 @@ h2 {
   height: 60px;
 }
 
+#site-name{
+  color: #56009b;
+}
+
 html,
 body {
   margin: 0;

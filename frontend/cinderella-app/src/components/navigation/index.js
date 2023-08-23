@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getPetTypes } from '../../api/petfinder';
+import { getProductTypes} from '../../api/products'
 import Logo from '../../assets/logo.svg';
 import Search from '../search';
 
@@ -7,21 +7,22 @@ import Search from '../search';
 import { NavLink } from 'react-router-dom';
 
 const Navigation = () => {
-  const [petTypes, setPetTypes] = useState([]);
+  const [productTypes, setProductTypes] = useState([]);
 
   useEffect(() => {
-    async function getPetTypesData() {
-      const { types } = await getPetTypes();
-      setPetTypes(types);
+    async function getProductTypesData() {
+      const type = await getProductTypes();
+      setProductTypes(type);
     }
 
-    getPetTypesData();
+    getProductTypesData();
   }, []);
 
   return (
     <nav>
       <div className="nav-logo">
         <img src={Logo} alt="Cinderella logo" id='my-logo' />
+        <h1 id='site-name'>Cinderella</h1>
         <Search />
       </div>
       <ul className="nav-links">
@@ -33,14 +34,14 @@ const Navigation = () => {
             All Shoes
           </NavLink>
         </li>
-        {petTypes
-          ? petTypes.map((type) => (
-              <li key={type.name}>
+        {productTypes
+          ? productTypes.map((product) => (
+              <li key={product.type}>
                 {/* These links should be NavLink component and add a special active class name if its an active link */}
-                <NavLink to={`/${type._links.self.href.split('/').pop()}`}
-                  key={type.name}
+                <NavLink to={`/${product.type}`}
+                  key={product.type}
                   className={({isActive}) => `nav-link ${isActive ? 'nav-link-active' : ''}` }       >
-                  {type.name}s
+                  {product.type}
                 </NavLink>{' '}
               </li>
             ))

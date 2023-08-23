@@ -148,28 +148,28 @@ ALTER TABLE IF EXISTS clt_customers
 
 
 
--- Table: clt_products
+-- Table: public.clt_products
 
--- DROP TABLE IF EXISTS clt_products;
+-- DROP TABLE IF EXISTS public.clt_products;
 
-CREATE TABLE IF NOT EXISTS clt_products
+CREATE TABLE IF NOT EXISTS public.clt_products
 (
-    id integer NOT NULL,
+    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
     brand_id integer NOT NULL,
-    model VARCHAR(50) COLLATE pg_catalog."default" NOT NULL,
+    model character varying(50) COLLATE pg_catalog."default" NOT NULL,
     type "group",
-    state "status" NOT NULL,
+    state status NOT NULL,
+    img character varying(250) COLLATE pg_catalog."default",
     CONSTRAINT clt_products_pkey PRIMARY KEY (id),
     CONSTRAINT constr_brand_id FOREIGN KEY (brand_id)
-        REFERENCES clt_brands (id) MATCH SIMPLE
+        REFERENCES public.clt_brands (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-        NOT VALID
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS clt_products
+ALTER TABLE IF EXISTS public.clt_products
     OWNER to postgres;
 
 

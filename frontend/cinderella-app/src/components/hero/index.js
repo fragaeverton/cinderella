@@ -34,6 +34,6 @@ const getHeroTitle = (type) => {
     case 'bird':
       return 'Birds';
     default:
-      return 'Find your perfect pet';
+      return 'Find your perfect shoe';
   }
 };

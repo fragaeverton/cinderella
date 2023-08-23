@@ -1,7 +1,7 @@
 import HomePage from './pages/home';
 import SearchPage from './pages/search';
-import PetDetailsPage from './pages/detail';
-import PetDetailsNotFound from './pages/petDetailsNotFound';
+import ProductDetailsPage from './pages/detail';
+import ProductDetailsNotFound from './pages/productDetailsNotFound';
 import Root from './components/root';
 
 // Add react-router-dom imports
@@ -12,9 +12,9 @@ const appRouter = createBrowserRouter(createRoutesFromElements(
   <Route path='/' element={<Root/>}>
     <Route index element={<HomePage/>} />
     <Route path=":type" element={<HomePage/>} />
-    <Route path=":type/:id" element={<PetDetailsPage/>} />
+    <Route path=":type/:id" element={<ProductDetailsPage/>} />
     <Route path="search" element={<SearchPage/>} />
-    <Route path="pet-details-not-fount" element={<PetDetailsNotFound/>} />
+    <Route path="product-details-not-fount" element={<ProductDetailsNotFound/>} />
 
   </Route>
 ));
