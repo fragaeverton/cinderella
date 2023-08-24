@@ -1,8 +1,18 @@
 const LocalStrategy = require("passport-local").Strategy;
-const { emailExists, matchPassword, findById, createUser, updatePassword, deleteUser} = require("./helper");
+const { emailExists, matchPassword, findById, createUser, updatePassword, deleteUser, updateToken} = require("./helper");
 
 
 module.exports = function(passport){
+    function generateToken(length){
+        //edit the token allowed characters
+        var a = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".split("");
+        var b = [];  
+        for (var i=0; i<length; i++) {
+            var j = (Math.random() * (a.length-1)).toFixed(0);
+            b[i] = a[j];
+        }
+        return b.join("");
+    }
 
     passport.use("local-login", new LocalStrategy(
         {
@@ -15,7 +25,9 @@ module.exports = function(passport){
                 if (!user) return done(null, false);
                 const isMatch = await matchPassword(password, user.password);
                 if (!isMatch) return done(null, false);
-                return done(null, {id: user.id, email: user.email});
+                const saveToken = await updateToken(email, generateToken(32));
+                if (!saveToken) return done(null, false);
+                return done(null, {id: user.id, token: saveToken.token});
             } catch (error) {
                 return done(error, false);
             }

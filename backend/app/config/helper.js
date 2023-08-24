@@ -24,12 +24,23 @@ const matchPassword = async (password, hashPassword) => {
     return match;
 };
 
+const updateToken = async (email, tkn) => {
+ 
+  const data = await client.query(
+    "UPDATE clt_users VALUES set token = $2 WHERE email = $1 RETURNING token",
+    [email, tkn]
+  );
+ 
+  if (data.rowCount == 0) return false;
+  return data.rows[0];
+};
+
 const createUser = async (email, password) => {
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
    
     const data = await client.query(
-      "INSERT INTO clt_users(email, password) VALUES ($1, $2) RETURNING id, email, password",
+      "INSERT INTO clt_users(email, password, state) VALUES ($1, $2, 'Active') RETURNING id, email, password",
       [email, hash]
     );
    
@@ -60,4 +71,4 @@ const deleteUser = async (email) => {
 };
 
 
-module.exports = { emailExists, matchPassword, createUser, findById, updatePassword, deleteUser};
+module.exports = { emailExists, matchPassword, createUser, findById, updatePassword, deleteUser, updateToken};

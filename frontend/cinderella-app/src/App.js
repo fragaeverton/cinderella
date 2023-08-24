@@ -1,5 +1,6 @@
 import HomePage from './pages/home';
 import SearchPage from './pages/search';
+import User from './pages/user';
 import ProductDetailsPage from './pages/detail';
 import ProductDetailsNotFound from './pages/productDetailsNotFound';
 import Root from './components/root';
@@ -14,6 +15,7 @@ const appRouter = createBrowserRouter(createRoutesFromElements(
     <Route path=":type" element={<HomePage/>} />
     <Route path=":type/:id" element={<ProductDetailsPage/>} />
     <Route path="search" element={<SearchPage/>} />
+    <Route path="auth" element={<User/>} />
     <Route path="product-details-not-fount" element={<ProductDetailsNotFound/>} />
 
   </Route>

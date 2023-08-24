@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getProductTypes} from '../../api/products'
 import Logo from '../../assets/logo.svg';
 import Search from '../search';
+import User from '../user';
 
 // Import NavLink
 import { NavLink } from 'react-router-dom';
@@ -24,6 +25,7 @@ const Navigation = () => {
         <img src={Logo} alt="Cinderella logo" id='my-logo' />
         <h1 id='site-name'>Cinderella</h1>
         <Search />
+        <User/>
       </div>
       <ul className="nav-links">
         <li key={'all'}>

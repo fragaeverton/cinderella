@@ -7,6 +7,7 @@ import { useParams, Link } from 'react-router-dom';
 // import Link
 
 const HomePage = () => {
+  console.log()
   const [data, setData] = useState(null);
   const {type} = useParams(); // Fix me!
 
