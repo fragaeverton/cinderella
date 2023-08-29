@@ -4,9 +4,12 @@ import User from './pages/user';
 import ProductDetailsPage from './pages/detail';
 import ProductDetailsNotFound from './pages/productDetailsNotFound';
 import Root from './components/root';
+import Cookies from 'universal-cookie';
 
 // Add react-router-dom imports
 import { RouterProvider, createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
+
+export const cookies = new Cookies(null, { path: '/' });
 
 // create router with JSX Route elements
 const appRouter = createBrowserRouter(createRoutesFromElements(

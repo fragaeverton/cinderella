@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { userLogin} from '../../api/login';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { loginUser } from '../../store/userSlice';
+import { cookies } from '../../App';
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -8,6 +10,9 @@ const LoginForm = () => {
     email: '',
     password: ''
   });
+
+  const dispatch = useDispatch();
+  const {loading, error} = useSelector((state)=> state.user);
   
   const [formErrors, setFormErrors] = useState({
     email: '',
@@ -40,34 +45,25 @@ const LoginForm = () => {
       });
     }
   };
+  
   function Redirect(){
     navigate("/");
   }
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Here you can add your logic to handle the form submission,
-    // like sending the username and password to an authentication API.
-    async function login() {
-      let response = await userLogin(formData);
-      if(response.user){
-        Redirect();     
-
-        //setCookie(STORAGE_KEY, response.user.token);
-        
-        // Reset the form
-        setFormData({
-          name: '',
-          email: '',
-          password: ''
-        });
-      }else if(response.toString().indexOf("Unauthorized") > -1 ){        
+    dispatch(loginUser(formData)).then((response)=>{
+      if(response.payload.user){
+        Redirect();    
+        cookies.set("USER_TOKEN",{token:response.payload.user.token, id:response.payload.user.id})
+      }else if(response.payload.toString().indexOf("Unauthorized") > -1 ){        
         console.log("wrong login")
       }else{
         console.log(response)
       }
-    }
-    login();    
+    })
+    // Here you can add your logic to handle the form submission,
+    // like sending the username and password to an authentication API.
   };
 
   return (
@@ -97,7 +93,8 @@ const LoginForm = () => {
             />
             {formErrors.password && <span className="error">{formErrors.password}</span>}
           </div>
-          <button type="submit">Login</button>
+          <button type="submit">{ loading ? 'Loading...' :'Login'}</button>
+          { error &&(<div>{error}</div>)}
         </form>
       </div>
     </div>

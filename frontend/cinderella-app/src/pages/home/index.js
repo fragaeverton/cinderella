@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { getProducts} from '../../api/products'
 import Hero from '../../components/hero';
 import { useParams, Link } from 'react-router-dom';
-
 // import useParams
 // import Link
 
 const HomePage = () => {
-  console.log()
   const [data, setData] = useState(null);
   const {type} = useParams(); // Fix me!
 
@@ -32,7 +30,6 @@ const HomePage = () => {
         <span className="pet-type-label">{type ? `${type}s` : 'Pets'}</span>{' '}
         available for adoption near you
       </h3>*/}
-      {console.log(data)}
       {data.length ? (
         <div className="grid">
           {data.map((product) => (
