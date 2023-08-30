@@ -7,7 +7,11 @@ const getAllProducts = (request, response) => {
       if (error) {
         throw error
       }
-      response.status(200).json(results.rows)
+      let res = {
+        rows: results.rows,
+        session: request.sessionID
+      }
+      response.status(200).json(res)
     })
 }
 

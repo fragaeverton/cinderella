@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Product = ({ prod }) => {
-  console.log(prod)
+    
   return (
     <a
       key={prod.id}

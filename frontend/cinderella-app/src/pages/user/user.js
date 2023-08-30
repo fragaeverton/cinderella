@@ -15,9 +15,10 @@ const UserDetails = () =>{
         navigate("/");
     }
     return (
-        <div className="page">
+        <div className="grid">
             
-            <div className="grid">
+            <div className="pet">
+                <br/>
                 <div>Welcome {id}</div>
                 <br/>
                 <br/>

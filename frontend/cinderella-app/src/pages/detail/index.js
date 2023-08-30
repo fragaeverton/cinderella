@@ -2,11 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { getProductDetails }  from '../../api/products'; 
 import Hero from '../../components/hero';
 import { useParams, Navigate } from 'react-router-dom';
+import {cookies} from '../../App';
+import { useDispatch, useSelector } from 'react-redux';
 
 // Import useParams
 // Import Navigate
+function handleCart(productId){
+  const currentCart = cookies.get("SESSION");
+  let newItem = [...currentCart.cart, productId];
+  let newCart = {
+    ...currentCart,
+    cart: newItem
+  }  
+  cookies.set("SESSION",newCart)
+  console.log(cookies.get("SESSION"));
+}
 
-const ProductDetailsPage = () => {
+const ProductDetailsPage = () => {  
+  const dispatch = useDispatch();
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -59,6 +72,7 @@ const ProductDetailsPage = () => {
               <p>Size: {data[0].size}</p>
               <p>Price: {data[0].price}</p>
               <p>Available: {data[0].qty}</p>
+              <button onClick={()=>{ handleCart(data[0].id)}}>Add to cart</button>
             </div>
           </div>
         </main>

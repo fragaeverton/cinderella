@@ -13,7 +13,11 @@ loginRouter.post("/signup",
 loginRouter.post("/pass",
     passport.authenticate("local-login", { session: true }),
     (req, res, next) => {
-      res.json({ user: req.user });
+      let response = {
+        ...req.user,
+        session: req.sessionID
+      }
+      res.json({ user: response });
     }
 );
 
