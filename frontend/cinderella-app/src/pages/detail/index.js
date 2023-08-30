@@ -4,21 +4,13 @@ import Hero from '../../components/hero';
 import { useParams, Navigate } from 'react-router-dom';
 import {cookies} from '../../App';
 import { useDispatch, useSelector } from 'react-redux';
+import { increment } from '../../store/cartSlice';
 
 // Import useParams
 // Import Navigate
-function handleCart(productId){
-  const currentCart = cookies.get("SESSION");
-  let newItem = [...currentCart.cart, productId];
-  let newCart = {
-    ...currentCart,
-    cart: newItem
-  }  
-  cookies.set("SESSION",newCart)
-  console.log(cookies.get("SESSION"));
-}
 
 const ProductDetailsPage = () => {  
+  const count = useSelector(state => state.cart);
   const dispatch = useDispatch();
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
@@ -39,6 +31,19 @@ const ProductDetailsPage = () => {
 
     getProductsData();
   }, [id]);
+
+  
+  function handleCart(productId){
+    const currentCart = cookies.get("SESSION");
+    let newItem = [...currentCart.cart, productId];
+    let newCart = {
+      ...currentCart,
+      cart: newItem
+    }  
+    cookies.set("SESSION",newCart)
+    dispatch(increment());
+    console.log(cookies.get("SESSION"));
+  }
 
   return (
     <div>

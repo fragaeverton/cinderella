@@ -5,6 +5,7 @@ import ProductDetailsPage from './pages/detail';
 import ProductDetailsNotFound from './pages/productDetailsNotFound';
 import Root from './components/root';
 import Cookies from 'universal-cookie';
+import Cart from './pages/cart';
 
 // Add react-router-dom imports
 import { RouterProvider, createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
@@ -19,6 +20,7 @@ const appRouter = createBrowserRouter(createRoutesFromElements(
     <Route path=":type/:id" element={<ProductDetailsPage/>} />
     <Route path="search" element={<SearchPage/>} />
     <Route path="auth" element={<User/>} />
+    <Route path="cart" element={<Cart/>} />
     <Route path="product-details-not-fount" element={<ProductDetailsNotFound/>} />
 
   </Route>
