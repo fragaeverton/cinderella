@@ -9,10 +9,10 @@ import { setValue } from '../../store/cartSlice';
 const User = () => {
     const count = useSelector(state => state.cart);
     const dispatch = useDispatch();
+    const length = cookies.get("SESSION") !== undefined ? cookies.get("SESSION").cart.length : 0;
     useEffect(() => {
-        dispatch(setValue(cookies.get("SESSION").cart.length))
-    }, []);
-    
+        dispatch(setValue(length))
+    }, [0]);    
     
     return(  
         <div>

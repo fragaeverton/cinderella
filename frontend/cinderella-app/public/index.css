@@ -53,6 +53,17 @@
   object-fit: cover;
 }
 
+.pet-image-container-smaller {
+  height: 40px;
+  width: 40px;
+  overflow: hidden;
+  border-radius: 4px;
+  float: left;
+}
+.float{
+  float: right;
+}
+
 .pet {
   text-decoration: none !important;
   color: black;
@@ -209,4 +220,37 @@ body {
   column-gap: 12px;
   justify-content: center;
   padding: 32px 0;
+}
+
+.cart-list {
+  list-style: none;
+  padding: 0;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f7f7f7;
+}
+
+.item-image img {
+  max-width: 100px;
+  height: auto;
+  margin-right: 20px;
+}
+
+.remove-button {
+  background-color: #ff5050;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.remove-button:hover {
+  background-color: #cc0000;
 }

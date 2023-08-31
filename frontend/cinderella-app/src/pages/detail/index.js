@@ -3,14 +3,13 @@ import { getProductDetails }  from '../../api/products';
 import Hero from '../../components/hero';
 import { useParams, Navigate } from 'react-router-dom';
 import {cookies} from '../../App';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { increment } from '../../store/cartSlice';
 
 // Import useParams
 // Import Navigate
 
 const ProductDetailsPage = () => {  
-  const count = useSelector(state => state.cart);
   const dispatch = useDispatch();
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
@@ -33,16 +32,15 @@ const ProductDetailsPage = () => {
   }, [id]);
 
   
-  function handleCart(productId){
+  function handleCart(product){
     const currentCart = cookies.get("SESSION");
-    let newItem = [...currentCart.cart, productId];
+    product.qty = 1;
     let newCart = {
       ...currentCart,
-      cart: newItem
+      cart: [...currentCart.cart, product]
     }  
     cookies.set("SESSION",newCart)
     dispatch(increment());
-    console.log(cookies.get("SESSION"));
   }
 
   return (
@@ -77,7 +75,7 @@ const ProductDetailsPage = () => {
               <p>Size: {data[0].size}</p>
               <p>Price: {data[0].price}</p>
               <p>Available: {data[0].qty}</p>
-              <button onClick={()=>{ handleCart(data[0].id)}}>Add to cart</button>
+              <button onClick={()=>{ handleCart(data[0])}}>Add to cart</button>
             </div>
           </div>
         </main>
