@@ -10,6 +10,7 @@ const User = () => {
     const count = useSelector(state => state.cart);
     const dispatch = useDispatch();
     const length = cookies.get("SESSION") !== undefined ? cookies.get("SESSION").cart.length : 0;
+    const isAuthenticated = cookies.get("USER_TOKEN") ? cookies.get("USER_TOKEN").id ? true : false : false;
     useEffect(() => {
         dispatch(setValue(length))
     }, [0]);    
@@ -18,7 +19,11 @@ const User = () => {
         <div>
             <NavLink to="/cart">
                 <img src={CartLogo} alt="Cart"/>
-                {(count)}
+                {
+                    isAuthenticated 
+                        ? (count) 
+                        : ("")
+                }
             </NavLink>
             <NavLink to="/auth">
                 <img src={UserLogo} alt="User icon"/>

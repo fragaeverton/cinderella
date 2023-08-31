@@ -1,7 +1,15 @@
-import React from "react";
+import  React, {useEffect} from "react";
 import { cookies } from "../../App";
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () =>{
+    const navigate = useNavigate();
+    useEffect(() => {
+        const isAuthenticated = cookies.get("USER_TOKEN") ? cookies.get("USER_TOKEN").id ? true : false : false;
+        if(!isAuthenticated){
+            navigate("/auth")
+        }
+    }, []);   
     const obj = cookies.get("SESSION").cart;
     const combined = obj.reduce((result, current) => {
         const existing = result.find(item => item.id === current.id);
